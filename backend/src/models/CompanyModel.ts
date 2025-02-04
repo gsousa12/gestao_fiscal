@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 import { CompanyType, TaxRegime } from "../utils/enum.ts";
 
 const UserSchema = new mongoose.Schema({
+  companyCode: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
   companyName: {
     type: String,
     required: true,
@@ -32,10 +37,7 @@ const UserSchema = new mongoose.Schema({
     enum: Object.values(TaxRegime),
     required: true,
   },
-  isMEI: {
-    type: Boolean,
-    required: true,
-  },
+
   responsibleEmployee: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "User",

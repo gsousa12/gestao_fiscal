@@ -1,53 +1,40 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import {
-  createCompanyBody,
-  deleteCompanyBody,
-} from "../utils/bodyValidation.ts";
+import { createCompanyBody } from "../utils/bodyValidation.ts";
 import CompanyModel from "../models/CompanyModel.ts";
-import { request } from "http";
+
 import { createApiResponse } from "../utils/shared.ts";
-
-import { ZodError } from "zod";
-
-// ...
 
 export async function CreateCompany(req: FastifyRequest, res: FastifyReply) {
   try {
-    // Se usar parse (que lança exceção em caso de falha):
     const {
+      companyCode,
       companyName,
       city,
       adress,
       companyType,
-      isMEI,
       responsibleEmployee,
       taxRegime,
     } = createCompanyBody.parse(req.body);
 
     const newCompany = new CompanyModel({
+      companyCode,
       companyName,
       city,
       adress,
       companyType,
-      isMEI,
       responsibleEmployee,
       taxRegime,
     });
 
     await newCompany.save();
 
-    // Sucesso
     return res.status(201).send({ message: "Empresa criada com sucesso" });
   } catch (error) {
-    // Aqui, logamos se quisermos
-    console.error("Erro ao criar empresa:", error);
-
-    // Re-lançamos o erro para que o errorHandler capture
     throw error;
   }
 }
 
-export async function GetAllCompanies(req: FastifyRequest, res: FastifyReply) {
+export async function GetCompanies(req: FastifyRequest, res: FastifyReply) {
   try {
     const companies = await CompanyModel.find({ deletionDate: null });
 
@@ -67,11 +54,11 @@ export async function GetAllCompanies(req: FastifyRequest, res: FastifyReply) {
 }
 
 export async function GetCompanyById(
-  req: FastifyRequest<{ Params: { id: string } }>,
+  req: FastifyRequest<{ Body: { id: string } }>,
   reply: FastifyReply
 ) {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const company = await CompanyModel.findOne({ _id: id, deletionDate: null });
 
@@ -93,11 +80,11 @@ export async function GetCompanyById(
 }
 
 export async function DisableCompany(
-  req: FastifyRequest<{ Params: { id: string } }>,
+  req: FastifyRequest<{ Body: { id: string } }>,
   res: FastifyReply
 ) {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const company = await CompanyModel.findOne({
       _id: id,
@@ -125,11 +112,11 @@ export async function DisableCompany(
 }
 
 export async function DeleteCompanyById(
-  req: FastifyRequest<{ Params: { id: string } }>,
+  req: FastifyRequest<{ Body: { id: string } }>,
   res: FastifyReply
 ) {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const company = await CompanyModel.findOneAndDelete({
       _id: id,

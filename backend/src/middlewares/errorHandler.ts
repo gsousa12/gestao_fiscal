@@ -8,13 +8,13 @@ export function errorHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  console.error("Erro interceptado:", error);
+  // console.error("Erro interceptado:", error);
 
   let statusCode = error.statusCode ?? 500;
 
   let errorDetails: ErrorDetailsType = {
     code: error.name || "INTERNAL_ERROR",
-    message: null, // error.message
+    message: error.message, // error.message
     details: null, // error.stack,
   };
 
@@ -23,10 +23,10 @@ export function errorHandler(
     errorDetails = {
       code: "ZOD_VALIDATION_ERROR",
       message: "Erro de validação",
-      /*details: error.issues.map((issue) => ({
+      details: error.issues.map((issue) => ({
         path: issue.path.join("."),
         message: issue.message,
-      })),*/
+      })),
     };
   }
 

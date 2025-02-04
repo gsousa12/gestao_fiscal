@@ -3,14 +3,14 @@ import {
   CreateCompany,
   DeleteCompanyById,
   DisableCompany,
-  GetAllCompanies,
+  GetCompanies,
   GetCompanyById,
 } from "../controller/CompanyController.ts";
 
 export async function CompanyRoute(app: FastifyInstance) {
-  app.post("/create", CreateCompany);
-  app.get("/all", GetAllCompanies);
-  app.get("/get/:id", GetCompanyById);
-  app.post("/disable/:id", DisableCompany);
-  app.post("/delete/:id", DeleteCompanyById);
+  app.post("", CreateCompany);
+  app.get("", GetCompanies);
+  app.post("/id", GetCompanyById);
+  app.post("/disable", DisableCompany);
+  app.post("/delete", DeleteCompanyById);
 }

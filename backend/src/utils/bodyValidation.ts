@@ -7,6 +7,7 @@ export const registerUserBody = z.object({
 });
 
 export const createCompanyBody = z.object({
+  companyCode: z.number(),
   companyName: z.string(),
   city: z.string(),
   adress: z.object({
@@ -17,7 +18,6 @@ export const createCompanyBody = z.object({
   }),
   companyType: z.string(),
   taxRegime: z.string(),
-  isMEI: z.boolean(),
   responsibleEmployee: z.array(z.string()),
 });
 

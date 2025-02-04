@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { CompanyType, TaxRegime } from "../utils/enum.ts";
+import { CompanyTypeEnum, TaxRegimeEnum } from "../utils/enum.ts";
 
 const UserSchema = new mongoose.Schema({
   companyCode: {
@@ -29,12 +29,12 @@ const UserSchema = new mongoose.Schema({
   },
   companyType: {
     type: String || Number,
-    enum: Object.values(CompanyType),
+    enum: Object.values(CompanyTypeEnum),
     required: true,
   },
   taxRegime: {
     type: String || Number,
-    enum: Object.values(TaxRegime),
+    enum: Object.values(TaxRegimeEnum),
     required: true,
   },
 

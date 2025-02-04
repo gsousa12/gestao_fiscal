@@ -28,7 +28,9 @@ export async function CreateCompany(req: FastifyRequest, res: FastifyReply) {
 
     await newCompany.save();
 
-    return res.status(201).send({ message: "Empresa criada com sucesso" });
+    return res
+      .status(201)
+      .send(createApiResponse(null, "Empresa criada com sucesso", null));
   } catch (error) {
     throw error;
   }
@@ -44,11 +46,14 @@ export async function GetCompanies(req: FastifyRequest, res: FastifyReply) {
       throw notFoundError;
     }
 
+    const totalRows = companies.length;
+
     return res
       .status(200)
-      .send(createApiResponse(companies, "Empresas encontradas", null));
+      .send(
+        createApiResponse(companies, `${totalRows} Empresas encontradas`, null)
+      );
   } catch (error) {
-    console.error("Erro em GetAllCompanies:", error);
     throw error;
   }
 }
@@ -90,24 +95,31 @@ export async function DisableCompany(
       _id: id,
     });
     if (!company) {
-      return res.status(404).send({ message: "Empresa não encontrada." });
+      const notFoundError: any = new Error("Nenhuma empresa encontrada.");
+      notFoundError.statusCode = 404;
+      throw notFoundError;
     }
 
     if (company.deletionDate) {
       return res
         .status(400)
-        .send({ message: "Empresa já foi desativada anteriormente." });
+        .send(
+          createApiResponse(
+            null,
+            "Empresa já foi desativada anteriormente.",
+            null
+          )
+        );
     }
 
     company.deletionDate = new Date();
     await company.save();
 
-    return res.status(200).send({ message: "Empresa desativada com sucesso." });
+    return res
+      .status(200)
+      .send(createApiResponse(null, "Empresa desativada com sucesso", null));
   } catch (error) {
-    return res.status(400).send({
-      message: "Erro ao desativar a empresa.",
-      error: error,
-    });
+    throw error;
   }
 }
 
@@ -123,21 +135,27 @@ export async function DeleteCompanyById(
     });
 
     if (!company) {
-      return res.status(404).send({ message: "Empresa não encontrada." });
+      const notFoundError: any = new Error("Nenhuma empresa encontrada.");
+      notFoundError.statusCode = 404;
+      throw notFoundError;
     }
 
     if (company.deletionDate === null) {
-      return res.status(400).send({
-        message:
-          "Erro ao tentar deletar a empresa. Empresa precisa ser primeiramente desativa para depois ser deletada",
-      });
+      return res
+        .status(400)
+        .send(
+          createApiResponse(
+            null,
+            "Erro ao tentar deletar a empresa. Empresa precisa ser primeiramente desativa para depois ser deletada",
+            null
+          )
+        );
     }
 
-    return res.status(200).send({ message: "Empresa deletada com sucesso." });
+    return res
+      .status(200)
+      .send(createApiResponse(null, "Empresa deletada com sucesso.", null));
   } catch (error) {
-    return res.status(400).send({
-      message: "Erro ao desativar a empresa.",
-      error: error,
-    });
+    throw error;
   }
 }

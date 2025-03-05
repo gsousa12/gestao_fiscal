@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ICompanyRepository } from '../interfaces/company-repository.interface';
-import { COMPANY_REPOSITORY } from '../interfaces/tokens'; // Importe o token
+import { COMPANY_REPOSITORY } from '../interfaces/tokens';
 
 @Injectable()
 export class DeleteCompanyUseCase {
   constructor(
-    @Inject(COMPANY_REPOSITORY) // Use o token
+    @Inject(COMPANY_REPOSITORY)
     private readonly companyRepository: ICompanyRepository,
   ) {}
 

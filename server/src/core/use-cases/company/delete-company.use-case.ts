@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ICompanyRepository } from '../interfaces/company-repository.interface';
-import { COMPANY_REPOSITORY } from '../interfaces/tokens';
+import { ICompanyRepository } from '../../interfaces/company-repository.interface';
+import { COMPANY_REPOSITORY } from '../../interfaces/tokens';
 
 @Injectable()
 export class DeleteCompanyUseCase {

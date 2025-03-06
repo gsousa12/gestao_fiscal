@@ -7,6 +7,17 @@ datasource db {
   url      = env("DATABASE_URL") // DATABASE_URL no .env
 }
 
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Int  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
 model Company {
   id        Int      @id @default(autoincrement())
   name      String

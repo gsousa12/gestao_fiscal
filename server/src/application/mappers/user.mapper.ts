@@ -1,6 +1,6 @@
 import { CreateUserDto } from '../dto/request/create-user-request.dto';
 import { User } from '../../core/entities/user.entity';
-import { PasswordUtils } from '../../shared/utils/password.utils';
+import { PasswordUtils } from '../../modules/shared/utils/password.utils';
 import { CreateUserResponseDto } from '../dto/response/create-user-response.dto';
 
 export class UserMapper {
@@ -8,7 +8,7 @@ export class UserMapper {
     const user = new User();
     user.name = createUserDto.name;
     user.email = createUserDto.email;
-    user.password = await PasswordUtils.hashPassword(createUserDto.password);
+    user.password = createUserDto.password;
     user.role = createUserDto.role;
     return user;
   }

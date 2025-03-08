@@ -1,4 +1,4 @@
-import { UserRole } from 'src/shared/utils/enum';
+import { UserRole } from 'src/modules/shared/utils/enum';
 
 export class User {
   id?: number;

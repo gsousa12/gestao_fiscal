@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IUserRepository } from '../../interfaces/user-repository.interface';
-import { User } from '../../entities/user.entity';
-import { USER_REPOSITORY } from '../../interfaces/tokens';
-import { PasswordUtils } from '../../../shared/utils/password.utils';
+import { IUserRepository } from '../../../core/interfaces/user-repository.interface';
+import { User } from '../../../core/entities/user.entity';
+import { USER_REPOSITORY } from '../../../core/interfaces/tokens';
+import { PasswordUtils } from '../../shared/utils/password.utils';
 
 @Injectable()
 export class CreateUserUseCase {

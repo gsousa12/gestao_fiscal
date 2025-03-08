@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
-import { CreateUserDto } from 'src/application/dto/create-user.dto';
+import { CreateUserDto } from 'src/application/dto/request/create-user-request.dto';
 import { UserMapper } from 'src/application/mappers/user.mapper';
 import { CreateUserUseCase } from 'src/core/use-cases/user/create-user.use-case';
 import { DeleteUserUseCase } from 'src/core/use-cases/user/delete-user.use-case';
@@ -13,12 +13,16 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = UserMapper.toDomain(createUserDto);
-    return this.createUserUseCase.execute(user);
+    const user = await UserMapper.toDomain(createUserDto);
+    const createdUser = await this.createUserUseCase.execute(user);
+    const userResponse = UserMapper.toResponse(createdUser);
+
+    return userResponse;
   }
 
   @Delete(':id')
   async delete(@Param('id') id: number) {
-    return this.deleteUserUseCase.execute(+id);
+    await this.deleteUserUseCase.execute(+id);
+    return { message: 'Usuário deletado com sucesso!' };
   }
 }

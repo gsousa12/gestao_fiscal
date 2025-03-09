@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { LoginResponse, LoginCredentials } from "../../../../types/auth";
+import { LoginResponse, LoginCredentials } from "../types/auth";
 
 interface AuthState {
   token: string | null;
@@ -54,7 +54,7 @@ const authSlice = createSlice({
       )
       .addCase(loginUser.rejected, (state, action: any) => {
         state.loading = false;
-        state.error = action.payload?.message || "Login failed";
+        state.error = action.payload?.message || "Falha ao efetuar login";
       });
   },
 });

@@ -1,10 +1,11 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepositoryInterface } from '../../../core/interfaces/auth-repository.interface';
 import * as bcrypt from 'bcrypt';
 import { LoginRequestDto } from '../../../application/dto/request/login-request.dto';
 import { LoginResponseDto } from '../../../application/dto/response/login-response.dto';
 import { AUTH_REPOSITORY } from '../../../core/interfaces/tokens';
+import { MainException } from 'src/core/exceptions/main.exception';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,10 @@ export class AuthService {
   async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     const user = await this.validateUser(loginDto.email, loginDto.password);
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new MainException(
+        'Email ou senha inválidos',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {

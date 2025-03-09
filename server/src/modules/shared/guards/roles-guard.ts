@@ -3,9 +3,11 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
+import { MainException } from 'src/core/exceptions/main.exception';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -27,8 +29,9 @@ export class RolesGuard implements CanActivate {
 
     const hasRole = requiredRoles.includes(user.role);
     if (!hasRole) {
-      throw new ForbiddenException(
+      throw new MainException(
         'Você não tem permissão para acessar este recurso.',
+        HttpStatus.UNAUTHORIZED,
       );
     }
 

@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { loginUser } from "../redux/slice/authSlice";
-import { RootState, AppDispatch } from "../../../_shared/redux/store/store";
 import {
-  Button,
   TextField,
   Container,
   Box,
   Typography,
   Alert,
+  Button,
 } from "@mui/material";
+import { useLoginController } from "./login.controller";
+import {
+  containerStyles,
+  formStyles,
+  titleStyles,
+  buttonStyles,
+  alertStyles,
+} from "./login.style";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch: AppDispatch = useDispatch();
-  const { loading, error, token } = useSelector(
-    (state: RootState) => state.auth
-  );
-  const navigate = useNavigate();
+  const { loading, error, handleLogin, token, navigate } = useLoginController();
 
   useEffect(() => {
     const sessionToken = sessionStorage.getItem("access_token");
@@ -28,55 +28,46 @@ const Login: React.FC = () => {
     }
   }, [token, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await dispatch(loginUser({ email, password }));
-    if (result.meta.requestStatus === "fulfilled") {
-      navigate("/dashboard");
-    }
+    handleLogin(email, password);
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box
-        sx={{
-          mt: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Login
+    <Container maxWidth="xs" sx={containerStyles}>
+      <Box sx={formStyles}>
+        <Typography variant="h4" sx={titleStyles}>
+          Gestão Fiscal
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
           <TextField
-            margin="normal"
-            required
             fullWidth
             label="Email"
-            autoFocus
+            variant="outlined"
+            margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
           <TextField
-            margin="normal"
-            required
             fullWidth
             label="Senha"
             type="password"
+            variant="outlined"
+            margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {error && <Alert severity="error">{error}</Alert>}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            disabled={loading}
-          >
-            {loading ? "Carregando..." : "Entrar"}
+
+          {error && (
+            <Alert severity="error" sx={alertStyles}>
+              {error}
+            </Alert>
+          )}
+
+          <Button type="submit" disabled={loading} fullWidth sx={buttonStyles}>
+            {loading ? "Carregando..." : "Acessar Sistema"}
           </Button>
         </Box>
       </Box>
